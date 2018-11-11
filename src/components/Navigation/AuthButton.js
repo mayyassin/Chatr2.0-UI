@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import * as actionCreators from "../../store/actions/index";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,8 +18,8 @@ class AuthButton extends Component {
 
     if (user) {
       buttons = (
-        <li className="nav-item">
-          <span className="nav-link">
+        <li key="logoutButton" className="nav-item">
+          <span onClick={this.props.logout} className="nav-link">
             <FontAwesomeIcon icon={faSignOutAlt} /> Logout
           </span>
         </li>
@@ -46,4 +48,15 @@ class AuthButton extends Component {
   }
 }
 
-export default AuthButton;
+const mapStateToProps = state => ({
+  user: state.auth.user
+});
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(actionCreators.logout())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AuthButton);
