@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import * as actionCreators from "../store/actions/index";
+import { connect } from "react-redux";
 
 class RegistationForm extends Component {
   constructor(props) {
@@ -12,14 +14,20 @@ class RegistationForm extends Component {
     this.changeHandler = this.changeHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
   }
-
+  componentWillUnmount() {
+    this.props.resetForm();
+  }
   changeHandler(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
   submitHandler(e) {
     e.preventDefault();
-    alert("I don't work yet");
+    if (this.props.match.url.substring(1) === "login") {
+      this.props.login(this.state, this.props.history);
+    } else {
+      this.props.signup(this.state, this.props.history);
+    }
   }
 
   render() {
@@ -48,6 +56,11 @@ class RegistationForm extends Component {
                 onChange={this.changeHandler}
               />
             </div>
+            {this.props.errors.username && (
+              <div className="alert alert-danger">
+                {this.props.errors.username}
+              </div>
+            )}
             <div className="form-group">
               <input
                 className="form-control"
@@ -58,6 +71,18 @@ class RegistationForm extends Component {
                 onChange={this.changeHandler}
               />
             </div>
+            {this.props.errors.password && (
+              <div className="alert alert-danger">
+                {this.props.errors.password}
+              </div>
+            )}
+            {this.props.errors.non_field_errors && (
+              <div className="alert alert-danger">
+                {this.props.errors.non_field_errors}
+              </div>
+            )}
+
+            <div />
             <input
               className="btn btn-primary"
               type="submit"
@@ -80,5 +105,21 @@ class RegistationForm extends Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  errors: state.errors
+});
+const mapDispatchToProps = dispatch => {
+  return {
+    signup: (userData, history) =>
+      dispatch(actionCreators.signup(userData, history)),
+    login: (userData, history) =>
+      dispatch(actionCreators.login(userData, history)),
+    resetForm: () => dispatch(actionCreators.setErrors({}))
+  };
+};
 
-export default RegistationForm;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RegistationForm);
