@@ -11,9 +11,9 @@ export const fetchChannels = () => {
     instance
       .get("channels/")
       .then(res => res.data)
-      .then(channels =>
-        dispatch({ type: actionTypes.FETCH_CHANNELS, payload: channels })
-      )
+      .then(channels => {
+        dispatch({ type: actionTypes.FETCH_CHANNELS, payload: channels });
+      })
       .catch(err => {
         dispatch(setErrors(err.response.data));
       });
@@ -34,9 +34,9 @@ export const postChannel = newChannel => {
   };
 };
 
-export const resetChannels = () => {
+export const resetChannel = () => {
   return dispatch => {
-    dispatch({ type: actionTypes.RESET_CHANNELS });
+    dispatch({ type: actionTypes.RESET_CHANNEL });
   };
 };
 

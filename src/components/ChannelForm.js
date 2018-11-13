@@ -15,13 +15,13 @@ class ChannelForm extends Component {
     this.onTextchange = this.onTextchange.bind(this);
   }
 
-  submitChannel(event) {
-    event.preventDefault();
+  submitChannel(e) {
+    e.preventDefault();
     this.props.postChannel(this.state);
   }
 
-  onTextchange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+  onTextchange(e) {
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   render() {
