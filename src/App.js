@@ -12,6 +12,7 @@ import Welcome from "./components/Welcome";
 import RegistrationForm from "./components/RegistrationForm";
 import SuperSecretPage from "./components/SuperSecretPage";
 import Channels from "./components/Channels";
+import ChannelForm from "./components/ChannelForm";
 
 class App extends Component {
   componentDidMount() {
@@ -23,8 +24,10 @@ class App extends Component {
         <NavBar />
         <Switch>
           <Route path="/welcome" component={Welcome} />
-          <Route path="/channels" component={Channels} />
           <Route path="/channels/:channelID" component={Channels} />
+
+          <Route path="/channels" component={Channels} />
+          <Route path="/createChannel" component={ChannelForm} />
           <Route path="/(login|signup)" component={RegistrationForm} />
           <div className="content-wrapper">
             {this.props.user ? (

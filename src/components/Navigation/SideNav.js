@@ -4,6 +4,7 @@ import * as actionCreators from "../../store/actions/index";
 import { connect } from "react-redux";
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 import {
   faAngleLeft,
   faAngleRight,
@@ -19,17 +20,23 @@ class SideNav extends React.Component {
     this.state = { collapsed: false };
   }
 
+  componentDidMount() {
+    if (this.props.user) this.props.fetchChannels();
+  }
+
   render() {
-    let channelLinks = [];
-    if (this.props.user) {
-      const channelLinks = [{ name: "all" }].map(channel => (
-        <ChannelNavLink key={channel.name} channel={channel} />
-      ));
-    }
+    const channelLinks = this.props.channels.map(channel => (
+      <ChannelNavLink key={channel.id} channel={channel} />
+    ));
+
     return (
       <div>
         {this.props.user && (
-          <ul className="navbar-nav navbar-sidenav" id="exampleAccordion">
+          <ul
+            style={{ overflowY: "scroll" }}
+            className="navbar-nav navbar-sidenav"
+            id="exampleAccordion"
+          >
             <li
               className="nav-item"
               data-toggle="tooltip"
@@ -39,8 +46,11 @@ class SideNav extends React.Component {
                 <span className="nav-link-text mr-2">Channels</span>
                 <FontAwesomeIcon icon={faPlusCircle} />
               </Link>
+              <Link className="nav-link heading" to="/channels/all/">
+                <span className="nav-link-text mr-2">ChannelList</span>
+                {channelLinks}
+              </Link>
             </li>
-            {channelLinks}
           </ul>
         )}
         <ul className="navbar-nav sidenav-toggler">
@@ -66,7 +76,7 @@ class SideNav extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  channels: state.channels.channels,
+  channels: state.channels.channelList,
   user: state.auth.user
 });
 
